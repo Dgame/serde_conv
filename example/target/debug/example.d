@@ -1,0 +1,1 @@
+/mnt/d/Proggen/Rust/serde_conv/example/target/debug/example: /mnt/d/Proggen/Rust/serde_conv/example/src/main.rs /mnt/d/Proggen/Rust/serde_conv/serde_conv/src/lib.rs /mnt/d/Proggen/Rust/serde_conv/serde_conv_derive/src/lib.rs
