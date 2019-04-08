@@ -10,3 +10,4 @@ serde_conv = { path = "../serde_conv" }
 serde = "1.0.90"
 serde_derive = "1.0.90"
 serde_json = "1.0.39"
+serde-xml-rs = "0.3.1"

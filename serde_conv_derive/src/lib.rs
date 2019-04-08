@@ -8,6 +8,7 @@ enum Convert {
     Into(String),
     Maybe(String),
     Extract(String),
+    Deflate(String),
 }
 
 fn interpret_meta(attr: &syn::Attribute) -> Option<String> {
@@ -77,6 +78,14 @@ fn get_meta_items(attr: &syn::Attribute) -> Option<Convert> {
                     None
                 }
             }
+            "deflate" => {
+                if let Some(ident) = interpret_meta(attr) {
+                    Some(Convert::Deflate(ident))
+                } else {
+                    // TODO: produce an error
+                    None
+                }
+            }
             _ => None, // TODO: produce an error
         }
     } else {
@@ -120,10 +129,8 @@ fn impl_convert(ast: &syn::DeriveInput) -> TokenStream {
                             Convert::From(ty) => (ty, "from"),
                             Convert::Into(ty) => (ty, "into"),
                             Convert::Maybe(ty) => (ty, "maybe"),
-                            Convert::Extract(attr) => {
-                                dbg!(attr);
-                                ("text".to_string(), "extract")
-                            }
+                            Convert::Extract(attr) => (attr[1..].to_string(), "extract"),
+                            Convert::Deflate(attr) => (attr[1..].to_string(), "deflate"),
                         };
 
                         let de_with = format!(
@@ -144,7 +151,7 @@ fn impl_convert(ast: &syn::DeriveInput) -> TokenStream {
             }
 
             let result = quote! {
-                #(#attrs),*
+                #(#attrs)*
                 struct #name {
                     #(#fields),*
                 }
