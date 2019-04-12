@@ -112,6 +112,7 @@ fn collect_attributes(attributes: &[syn::Attribute]) -> Vec<proc_macro2::TokenSt
 fn impl_convert(ast: &syn::DeriveInput) -> TokenStream {
     use syn::Data;
 
+    let vis = &ast.vis;
     let name = &ast.ident;
     let attrs = collect_attributes(&ast.attrs);
     let mut fields = Vec::new();
@@ -144,15 +145,16 @@ fn impl_convert(ast: &syn::DeriveInput) -> TokenStream {
                     }
                 }
 
+                let vis = &field.vis;
                 fields.push(quote! {
                     #(#field_attributes)*
-                    #field_name: #field_type
+                    #vis #field_name: #field_type
                 });
             }
 
             let result = quote! {
                 #(#attrs)*
-                struct #name {
+                #vis struct #name {
                     #(#fields),*
                 }
             };
